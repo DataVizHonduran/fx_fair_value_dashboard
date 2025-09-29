@@ -6,8 +6,6 @@ from plotly.subplots import make_subplots
 from sklearn.linear_model import Lasso
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
-import requests
-import time
 import datetime
 from datetime import date
 from pandas_datareader import data
@@ -15,15 +13,13 @@ from pandas_datareader import data
 # Configuration
 exclude_recent = True
 years = 10
-api_key = "A55YWEL4Q784TTJ5"
-nsize = "full"
 
-# Currency symbols to analyze
-symbols = [
-    "EUR", "AUD", "CAD", "GBP", "JPY", "SEK", "NOK", "NZD", "CHF",
-    "MXN", "CLP", "BRL", "COP", "PEN",
-    "KRW", "IDR", "INR", "THB", "PHP", "SGD",
-    "PLN", "HUF", "CZK", "ZAR", "TRY"
+# Currency symbols from FRED data
+fx_labels = [
+    "EURUSD", "USDJPY", "GBPUSD", "USDCHF", "USDCAD", "AUDUSD", "NZDUSD","USDNOK", "USDSEK", 
+    "USDMXN", "USDBRL", "USDCLP", 
+    "USDZAR", 
+    "USDINR", "USDKRW", "USDTHB", "USDSGD"
 ]
 
 # Equity sector ETFs as predictors
@@ -57,46 +53,34 @@ for sector in equity_sector_etfs:
 
 ratios = [f"{sector} / SPY" for sector in equity_sector_etfs[:-1]]
 
-def get_fx_grid():
-    """Fetch FX data from Alpha Vantage"""
-    print("Fetching FX data from Alpha Vantage...")
-    data_dict = {}
+def get_fred_fx(years=10):
+    import datetime
+    from pandas_datareader import data
+    import pandas as pd
     
-    for symbol in symbols:
-        print(f"Fetching USD/{symbol}...")
-        url = "https://www.alphavantage.co/query"
-        params = {
-            "function": "FX_DAILY",
-            "from_symbol": "USD",
-            "to_symbol": symbol,
-            "outputsize": nsize,
-            "apikey": api_key
-        }
-        
-        try:
-            response = requests.get(url, params=params)
-            data_response = response.json()
-            
-            ts = data_response['Time Series FX (Daily)']
-            df = pd.DataFrame.from_dict(ts, orient='index')
-            df.index = pd.to_datetime(df.index)
-            df.columns = ['open', 'high', 'low', 'close']
-            df = df.astype(float)
-            df.sort_index(inplace=True)
-            
-            # Store just the close price for each currency
-            data_dict[symbol] = df['close']
-            
-        except KeyError:
-            print(f"Failed to fetch {symbol}: {data_response.get('Error Message', 'Unknown error')}")
-            continue
-            
-        time.sleep(15)  # Respect API rate limits
-    
-    # Combine into single DataFrame
-    combined_df = pd.DataFrame(data_dict)
-    combined_df.sort_index(inplace=True)
-    return combined_df
+    datalist = [
+        "DEXUSEU", "DEXJPUS", "DEXUSUK", "DEXSZUS", "DEXCAUS", "DEXUSAL","DEXUSNZ", "DEXNOUS", "DEXSDUS",
+        "DEXMXUS", "DEXBZUS", "DEXCHUS",
+        "DEXSFUS",
+        "DEXINUS","DEXKOUS", "DEXTHUS", "DEXSIUS"
+    ]
+    fx_labels = [
+        "EURUSD", "USDJPY", "GBPUSD", "USDCHF", "USDCAD", "AUDUSD", "NZDUSD","USDNOK", "USDSEK", 
+        "USDMXN", "USDBRL", "USDCLP", 
+        "USDZAR", 
+        "USDINR", "USDKRW", "USDTHB", "USDSGD"
+    ]
+    end_date = datetime.date.today()
+    print(f"Fetching FX data from FRED for date range ending: {end_date}")
+    start_date = end_date - datetime.timedelta(days=365*years)
+    df = data.DataReader(datalist, 'fred', start_date, end_date)
+    df.columns = fx_labels
+    df = df.apply(pd.to_numeric, errors='coerce')
+    df.index = pd.to_datetime(df.index, errors='coerce')
+    df = df.bfill()
+    print(f"Successfully loaded FX data: {df.shape}")
+    print(df.tail())
+    return df
 
 def calculate_fair_value(currency, indexed_df, fx_df, ratios):
     """Calculate fair value for a single currency"""
@@ -150,14 +134,14 @@ def calculate_fair_value(currency, indexed_df, fx_df, ratios):
 # Main execution
 print("Starting FX fair value analysis...")
 
-# Get FX data
-df_fx = get_fx_grid()
+# Get FX data using FRED
+df_fx = get_fred_fx(years)
 
 # Calculate fair values for all currencies
 results = {}
 fair_value_summary = []
 
-for currency in symbols:
+for currency in fx_labels:
     if currency in df_fx.columns:
         print(f"Calculating fair value for {currency}...")
         result = calculate_fair_value(currency, indexed_df, df_fx, ratios)
