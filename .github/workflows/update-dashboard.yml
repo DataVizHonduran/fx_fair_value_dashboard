@@ -2,7 +2,6 @@ name: Update FX Fair Value Dashboard
 
 on:
   schedule:
-    # Run daily at 7 AM EST (12 PM UTC) - after markets open
     - cron: '0 12 * * *'
   workflow_dispatch:
 
@@ -22,7 +21,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pandas scikit-learn plotly requests pandas-datareader numpy
+        pip install pandas scikit-learn plotly pandas-datareader numpy
+        
+    - name: Clean up any existing files
+      run: |
+        rm -f fx_fair_value.html fx_fair_value_data.json
         
     - name: Run FX fair value analysis
       run: |
@@ -32,8 +35,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git pull origin main
-        git add -A
+        git add fx_fair_value.html fx_fair_value_data.json
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
