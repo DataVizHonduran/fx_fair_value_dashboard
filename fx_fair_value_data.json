@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-09-29 01:35:28",
+  "last_updated": "2025-09-29 01:55:23",
   "currencies_analyzed": 17,
   "fair_value_summary": [
     {
@@ -121,5 +121,24 @@
       "Residual_%": 4.793904484563053,
       "R_Squared": -0.00016320025867400112
     }
+  ],
+  "individual_pages": [
+    "eurusd_analysis.html",
+    "usdjpy_analysis.html",
+    "gbpusd_analysis.html",
+    "usdchf_analysis.html",
+    "usdcad_analysis.html",
+    "audusd_analysis.html",
+    "nzdusd_analysis.html",
+    "usdnok_analysis.html",
+    "usdsek_analysis.html",
+    "usdmxn_analysis.html",
+    "usdbrl_analysis.html",
+    "usdclp_analysis.html",
+    "usdzar_analysis.html",
+    "usdinr_analysis.html",
+    "usdkrw_analysis.html",
+    "usdthb_analysis.html",
+    "usdsgd_analysis.html"
   ]
 }
