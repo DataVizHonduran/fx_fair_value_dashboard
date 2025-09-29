@@ -109,7 +109,13 @@ def calculate_fair_value(currency, indexed_df, fx_df, ratios):
         
         # Model metrics
         y_pred = lasso.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
         r_squared = r2_score(y_test, y_pred)
+        
+        # Get model coefficients info
+        coefficients = lasso.coef_
+        non_zero_coefficients = [round(x,3) for x in coefficients if x != 0]
+        selected_vars = [valid_ratios[i] for i in range(len(coefficients)) if coefficients[i] != 0]
         
         # Current fair value metrics
         current_actual = chart_df[currency].iloc[-1]
@@ -122,9 +128,12 @@ def calculate_fair_value(currency, indexed_df, fx_df, ratios):
             'current_predicted': current_predicted,
             'current_residual': current_residual,
             'r_squared': r_squared,
+            'mse': mse,
             'chart_data': chart_df,
             'model': lasso,
-            'valid_ratios': valid_ratios
+            'valid_ratios': valid_ratios,
+            'coefficients': non_zero_coefficients,
+            'selected_vars': selected_vars
         }
         
     except Exception as e:
@@ -164,20 +173,24 @@ print(f"\nProcessed {len(summary_df)} currencies successfully")
 print("\nFair Value Summary:")
 print(summary_df)
 
-# Create main dashboard
-def create_dashboard():
-    """Create the main FX fair value dashboard with dropdown functionality"""
+def create_main_dashboard():
+    """Create the main overview dashboard with only the bar chart"""
     
     # Main bar chart showing current fair values
     colors = ['red' if x < 0 else 'green' for x in summary_df['Residual_%']]
     
-    # Create the main figure structure
-    fig = make_subplots(
-        rows=2, cols=1,
-        subplot_titles=('FX Fair Value Overview - Current Residuals', 'Individual Currency Analysis'),
-        vertical_spacing=0.15,
-        row_heights=[0.6, 0.4]
-    )
+    fig = go.Figure()
+    
+    # Create clickable bar chart with links
+    hover_text = []
+    link_text = []
+    
+    for i, row in summary_df.iterrows():
+        currency = row['Currency']
+        residual = row['Residual_%']
+        r_squared = row['R_Squared']
+        hover_text.append(f"<b>{currency}</b><br>Residual: {residual:.1f}%<br>R²: {r_squared:.2f}<br><i>Click for detailed analysis</i>")
+        link_text.append(f"{currency.lower()}_analysis.html")
     
     # Main horizontal bar chart
     fig.add_trace(go.Bar(
@@ -188,111 +201,50 @@ def create_dashboard():
         name='Cheap/Rich (%)',
         text=[f"{x:.1f}%" for x in summary_df['Residual_%']],
         textposition='outside',
-        hovertemplate='<b>%{y}</b><br>Residual: %{x:.1f}%<br>R²: %{customdata:.2f}<extra></extra>',
-        customdata=summary_df['R_Squared']
-    ), row=1, col=1)
+        hovertemplate='%{customdata}<extra></extra>',
+        customdata=hover_text
+    ))
     
     # Add vertical line at zero
-    fig.add_vline(x=0, line_dash="dash", line_color="gray", row=1, col=1)
+    fig.add_vline(x=0, line_dash="dash", line_color="gray")
     
-    # Create traces for all currencies (initially hidden)
-    for i, currency in enumerate(results.keys()):
-        chart_data = results[currency]['chart_data']
-        r_squared = results[currency]['r_squared']
-        
-        # Actual rate trace
-        fig.add_trace(go.Scatter(
-            x=chart_data.index,
-            y=chart_data[currency],
-            mode='lines',
-            name=f'{currency} Actual',
-            line=dict(color='blue', width=2),
-            visible=(i == 0),  # Only first currency visible initially
-            legendgroup=f'group{i}',
-            showlegend=True if i == 0 else False
-        ), row=2, col=1)
-        
-        # Fair value trace
-        fig.add_trace(go.Scatter(
-            x=chart_data.index,
-            y=chart_data['ypred'],
-            mode='lines',
-            name=f'{currency} Fair Value (R²={r_squared:.2f})',
-            line=dict(color='red', width=2, dash='dash'),
-            visible=(i == 0),  # Only first currency visible initially
-            legendgroup=f'group{i}',
-            showlegend=True if i == 0 else False
-        ), row=2, col=1)
+    # Add currency links as annotations
+    currency_links_html = "<br>".join([
+        f'<a href="{currency.lower()}_analysis.html" style="text-decoration:none; color:#1f77b4;">📊 {currency} Detailed Analysis</a>' 
+        for currency in summary_df['Currency']
+    ])
     
-    # Create dropdown menu
-    dropdown_buttons = []
-    
-    for i, currency in enumerate(results.keys()):
-        # Create visibility array for this currency
-        visibility = [True]  # Bar chart always visible
-        
-        # Set visibility for currency traces
-        for j, _ in enumerate(results.keys()):
-            if j == i:
-                visibility.extend([True, True])  # Show actual and fair value for selected currency
-            else:
-                visibility.extend([False, False])  # Hide other currencies
-        
-        dropdown_buttons.append(
-            dict(
-                label=currency,
-                method="update",
-                args=[{"visible": visibility},
-                      {"title.text": f"FX Fair Value Dashboard - {currency} Selected"}]
-            )
-        )
-    
-    # Update layout with dropdown
     last_updated = datetime.datetime.now().strftime('%Y-%m-%d %H:%M UTC')
     
     fig.update_layout(
         title={
-            'text': f"FX Fair Value Dashboard - {list(results.keys())[0]} Selected",
+            'text': "FX Fair Value Overview",
             'x': 0.5,
             'xanchor': 'center',
-            'font': {'size': 24}
+            'font': {'size': 28}
         },
-        height=800,
+        xaxis_title="Residual (%)",
+        yaxis_title="Currency Pair",
+        height=700,
         template="plotly_white",
         hovermode='closest',
-        showlegend=True,
-        updatemenus=[
-            dict(
-                buttons=dropdown_buttons,
-                direction="down",
-                showactive=True,
-                x=0.02,
-                xanchor="left",
-                y=0.45,
-                yanchor="top",
-                bgcolor="white",
-                bordercolor="gray",
-                borderwidth=1,
-                font=dict(size=12)
-            )
-        ],
-        annotations=[
-            dict(
-                text="Select Currency:",
-                x=0.02, y=0.48,
-                xref="paper", yref="paper",
-                align="left",
-                showarrow=False,
-                font=dict(size=12, color="black")
-            )
-        ]
+        showlegend=False,
+        margin=dict(r=200)  # More space for links
     )
     
-    # Update axis labels
-    fig.update_xaxes(title_text="Residual (%)", row=1, col=1)
-    fig.update_xaxes(title_text="Date", row=2, col=1)
-    fig.update_yaxes(title_text="Currency", row=1, col=1)
-    fig.update_yaxes(title_text="Exchange Rate", row=2, col=1)
+    # Add navigation links
+    fig.add_annotation(
+        text="<b>Individual Currency Analysis:</b><br>" + currency_links_html,
+        xref="paper", yref="paper",
+        x=1.02, y=1,
+        xanchor='left', yanchor='top',
+        showarrow=False,
+        font=dict(size=11),
+        align="left",
+        bgcolor="rgba(255,255,255,0.8)",
+        bordercolor="gray",
+        borderwidth=1
+    )
     
     # Add "Last Updated" annotation
     fig.add_annotation(
@@ -306,31 +258,153 @@ def create_dashboard():
     
     return fig
 
-# Generate dashboard
-print("\nCreating dashboard...")
-dashboard_fig = create_dashboard()
+def create_individual_currency_page(currency, result):
+    """Create individual currency analysis page"""
+    
+    chart_data = result['chart_data']
+    
+    # Add white space at right side of charts
+    new_dates = pd.date_range(start=chart_data.index[-1], periods=int(len(chart_data.index) * .05), freq='D')
+    empty_rows = pd.DataFrame(index=new_dates)
+    chart_data = pd.concat([chart_data, empty_rows])
+    
+    # Create two-panel chart
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=(f'{currency} vs Fair Value Model', 'Residual (% Deviation)'),
+        horizontal_spacing=0.1
+    )
+    
+    # Left panel: Actual vs Model
+    fig.add_scatter(
+        x=chart_data.index, 
+        y=chart_data[currency], 
+        mode='lines', 
+        name=currency,
+        line=dict(color='blue', width=2),
+        row=1, col=1
+    )
+    
+    fig.add_scatter(
+        x=chart_data.index, 
+        y=chart_data["ypred"], 
+        mode='lines', 
+        name="Fair Value Model",
+        line=dict(color='red', width=2, dash='dash'),
+        row=1, col=1
+    )
+    
+    # Right panel: Residuals
+    fig.add_scatter(
+        x=chart_data.index, 
+        y=chart_data["resids"], 
+        mode='lines', 
+        name="Residual (%)",
+        line=dict(color='green', width=2),
+        row=1, col=2
+    )
+    
+    # Add zero line to residuals
+    fig.add_hline(y=0, line_dash="dash", line_color="gray", row=1, col=2)
+    
+    # Model info
+    r_squared = result['r_squared']
+    mse = result['mse']
+    current_residual = result['current_residual']
+    
+    # Update layout
+    last_updated = datetime.datetime.now().strftime('%Y-%m-%d %H:%M UTC')
+    
+    fig.update_layout(
+        title={
+            'text': f"{currency} Fair Value Analysis - R²: {r_squared:.3f}",
+            'x': 0.5,
+            'xanchor': 'center',
+            'font': {'size': 20}
+        },
+        width=1200,
+        height=600,
+        template="plotly_white",
+        showlegend=True
+    )
+    
+    # Add model details
+    model_info = f"""
+    <b>Model Performance:</b><br>
+    R-squared: {r_squared:.3f}<br>
+    MSE: {mse:.2f}<br>
+    Current Residual: {current_residual:.1f}%<br>
+    <br>
+    <b>Key Predictors:</b><br>
+    {', '.join(result['selected_vars'][:5])}
+    """
+    
+    fig.add_annotation(
+        text=model_info,
+        xref="paper", yref="paper",
+        x=0.02, y=0.98,
+        xanchor='left', yanchor='top',
+        showarrow=False,
+        font=dict(size=10),
+        align="left",
+        bgcolor="rgba(255,255,255,0.8)",
+        bordercolor="gray",
+        borderwidth=1
+    )
+    
+    # Back to main link
+    fig.add_annotation(
+        text='<a href="fx_fair_value.html" style="color:#1f77b4;">← Back to Overview</a>',
+        xref="paper", yref="paper",
+        x=1, y=1.02,
+        xanchor='right', yanchor='bottom',
+        showarrow=False,
+        font=dict(size=12)
+    )
+    
+    # Last updated
+    fig.add_annotation(
+        text=f"Last Updated: {last_updated}",
+        xref="paper", yref="paper",
+        x=1, y=-0.05,
+        xanchor='right', yanchor='top',
+        showarrow=False,
+        font=dict(size=12, color="gray")
+    )
+    
+    return fig
 
-# Save dashboard
-config = {
-    'displayModeBar': False,
-    'responsive': True
-}
+# Generate all dashboard files
+print("\nCreating dashboards...")
 
-output_filename = "fx_fair_value.html"
-pyo.plot(dashboard_fig, filename=output_filename, auto_open=False, config=config)
+# Main overview dashboard
+main_fig = create_main_dashboard()
+config = {'displayModeBar': False, 'responsive': True}
 
-print(f"Dashboard saved as '{output_filename}'")
+# Save main dashboard
+pyo.plot(main_fig, filename="fx_fair_value.html", auto_open=False, config=config)
+print("Main dashboard saved as 'fx_fair_value.html'")
+
+# Create individual currency pages
+for currency, result in results.items():
+    individual_fig = create_individual_currency_page(currency, result)
+    filename = f"{currency.lower()}_analysis.html"
+    pyo.plot(individual_fig, filename=filename, auto_open=False, config=config)
+    print(f"Individual analysis saved as '{filename}'")
 
 # Save summary data
 summary_data = {
     'last_updated': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
     'currencies_analyzed': len(summary_df),
-    'fair_value_summary': summary_df.to_dict('records')
+    'fair_value_summary': summary_df.to_dict('records'),
+    'individual_pages': [f"{currency.lower()}_analysis.html" for currency in results.keys()]
 }
 
 import json
 with open('fx_fair_value_data.json', 'w') as f:
     json.dump(summary_data, f, indent=2)
 
+print(f"\nGenerated {len(results)} individual currency analysis pages")
 print("Summary data saved as 'fx_fair_value_data.json'")
-print(f"\nDashboard will show {len(summary_df)} currencies with fair value analysis")
+print(f"\nMain dashboard: fx_fair_value.html")
+print("Individual pages:", [f"{c.lower()}_analysis.html" for c in results.keys()])
