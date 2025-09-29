@@ -1,0 +1,83 @@
+{
+  "last_updated": "2025-09-29 01:12:54",
+  "currencies_analyzed": 11,
+  "fair_value_summary": [
+    {
+      "Currency": "CHF",
+      "Current_Rate": 0.7975,
+      "Fair_Value": 0.9228538866063425,
+      "Residual_%": -15.718355687315674,
+      "R_Squared": 0.3265904074783438
+    },
+    {
+      "Currency": "PEN",
+      "Current_Rate": 3.491,
+      "Fair_Value": 3.7927465772397175,
+      "Residual_%": -8.643557067880762,
+      "R_Squared": 0.6129927175208055
+    },
+    {
+      "Currency": "MXN",
+      "Current_Rate": 18.343,
+      "Fair_Value": 19.352508904102024,
+      "Residual_%": -5.503510353279309,
+      "R_Squared": 0.39041932976786986
+    },
+    {
+      "Currency": "EUR",
+      "Current_Rate": 0.8545,
+      "Fair_Value": 0.8955798520204895,
+      "Residual_%": -4.807472442421236,
+      "R_Squared": -0.0010565823675605657
+    },
+    {
+      "Currency": "JPY",
+      "Current_Rate": 149.49,
+      "Fair_Value": 155.06313948256684,
+      "Residual_%": -3.728101868062633,
+      "R_Squared": 0.9240003094914002
+    },
+    {
+      "Currency": "GBP",
+      "Current_Rate": 0.74627,
+      "Fair_Value": 0.7695595674445077,
+      "Residual_%": -3.1207964201304783,
+      "R_Squared": -0.00045974769366696755
+    },
+    {
+      "Currency": "TRY",
+      "Current_Rate": 41.358,
+      "Fair_Value": 42.62479441175378,
+      "Residual_%": -3.062997272000062,
+      "R_Squared": 0.9700363394336201
+    },
+    {
+      "Currency": "KRW",
+      "Current_Rate": 1409.45,
+      "Fair_Value": 1442.673384180226,
+      "Residual_%": -2.357187852015045,
+      "R_Squared": 0.9040347708265435
+    },
+    {
+      "Currency": "IDR",
+      "Current_Rate": 16725.0,
+      "Fair_Value": 16446.960603805375,
+      "Residual_%": 1.6624179144671136,
+      "R_Squared": 0.8708211393520474
+    },
+    {
+      "Currency": "AUD",
+      "Current_Rate": 1.52765,
+      "Fair_Value": 1.4645658164439272,
+      "Residual_%": 4.12949193572302,
+      "R_Squared": 0.29430749883534335
+    },
+    {
+      "Currency": "CAD",
+      "Current_Rate": 1.3942,
+      "Fair_Value": 1.3248049117814455,
+      "Residual_%": 4.977412725473716,
+      "R_Squared": -0.002192548700660213
+    }
+  ]
+}
