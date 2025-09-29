@@ -17,9 +17,9 @@ years = 10
 # Currency symbols from FRED data
 fx_labels = [
     "USDNOK", "USDSEK", 
-    "USDMXN", "USDBRL", "USDCLP", 
+    "USDMXN", "USDBRL",
     "USDZAR", 
-    "USDINR", "USDKRW", "USDTHB", "USDSGD"
+    "USDINR", "USDKRW", "USDTHB", "USDSGD", "USDCNH"
 ]
 
 # Equity sector ETFs as predictors
@@ -60,15 +60,15 @@ def get_fred_fx(years=10):
     
     datalist = [
         "DEXNOUS", "DEXSDUS",
-        "DEXMXUS", "DEXBZUS", "DEXCHUS",
+        "DEXMXUS", "DEXBZUS", 
         "DEXSFUS",
-        "DEXINUS","DEXKOUS", "DEXTHUS", "DEXSIUS"
+        "DEXINUS","DEXKOUS", "DEXTHUS", "DEXSIUS", "DEXCHUS",
     ]
     fx_labels = [
         "USDNOK", "USDSEK", 
-        "USDMXN", "USDBRL", "USDCLP", 
+        "USDMXN", "USDBRL", 
         "USDZAR", 
-        "USDINR", "USDKRW", "USDTHB", "USDSGD"
+        "USDINR", "USDKRW", "USDTHB", "USDSGD", "USDCNH"
     ]
     end_date = datetime.date.today()
     print(f"Fetching FX data from FRED for date range ending: {end_date}")
