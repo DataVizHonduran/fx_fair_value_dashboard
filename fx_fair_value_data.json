@@ -1,21 +1,7 @@
 {
-  "last_updated": "2025-09-29 12:51:57",
-  "currencies_analyzed": 17,
+  "last_updated": "2025-09-29 13:34:54",
+  "currencies_analyzed": 10,
   "fair_value_summary": [
-    {
-      "Currency": "USDCHF",
-      "Current_Rate": 0.7949,
-      "Fair_Value": 0.9233742527384939,
-      "Residual_%": -16.162316359101002,
-      "R_Squared": 0.32469555206902956
-    },
-    {
-      "Currency": "NZDUSD",
-      "Current_Rate": 0.5859,
-      "Fair_Value": 0.6576852337514252,
-      "Residual_%": -12.252130696607818,
-      "R_Squared": -0.0010086354643892292
-    },
     {
       "Currency": "USDSEK",
       "Current_Rate": 9.4077,
@@ -36,13 +22,6 @@
       "Fair_Value": 5.739345034795992,
       "Residual_%": -7.766960865163108,
       "R_Squared": 0.8623876918637305
-    },
-    {
-      "Currency": "AUDUSD",
-      "Current_Rate": 0.6597,
-      "Fair_Value": 0.7077734321550742,
-      "Residual_%": -7.287165704877097,
-      "R_Squared": -5.909761872535668e-06
     },
     {
       "Currency": "USDZAR",
@@ -73,13 +52,6 @@
       "R_Squared": 0.7181927017960279
     },
     {
-      "Currency": "USDJPY",
-      "Current_Rate": 147.83,
-      "Fair_Value": 152.97131223347898,
-      "Residual_%": -3.477854450029744,
-      "R_Squared": 0.9211003501988411
-    },
-    {
       "Currency": "USDKRW",
       "Current_Rate": 1397.43,
       "Fair_Value": 1427.4643485216209,
@@ -87,7 +59,7 @@
       "R_Squared": 0.9023888691988253
     },
     {
-      "Currency": "USDCLP",
+      "Currency": "USDCNH",
       "Current_Rate": 7.1142,
       "Fair_Value": 7.1032718924102936,
       "Residual_%": 0.1536097887282723,
@@ -99,46 +71,18 @@
       "Fair_Value": 87.461466475178,
       "Residual_%": 0.6796883089052946,
       "R_Squared": 0.948418140841023
-    },
-    {
-      "Currency": "GBPUSD",
-      "Current_Rate": 1.3484,
-      "Fair_Value": 1.3046266248574685,
-      "Residual_%": 3.2463197228219776,
-      "R_Squared": -0.001139531413084649
-    },
-    {
-      "Currency": "USDCAD",
-      "Current_Rate": 1.3772,
-      "Fair_Value": 1.3242711516533638,
-      "Residual_%": 3.8432216342314938,
-      "R_Squared": -4.107378463458211e-05
-    },
-    {
-      "Currency": "EURUSD",
-      "Current_Rate": 1.1753,
-      "Fair_Value": 1.1189572405929304,
-      "Residual_%": 4.793904484563053,
-      "R_Squared": -0.00016320025867400112
     }
   ],
   "individual_pages": [
-    "eurusd_analysis.html",
-    "usdjpy_analysis.html",
-    "gbpusd_analysis.html",
-    "usdchf_analysis.html",
-    "usdcad_analysis.html",
-    "audusd_analysis.html",
-    "nzdusd_analysis.html",
     "usdnok_analysis.html",
     "usdsek_analysis.html",
     "usdmxn_analysis.html",
     "usdbrl_analysis.html",
-    "usdclp_analysis.html",
     "usdzar_analysis.html",
     "usdinr_analysis.html",
     "usdkrw_analysis.html",
     "usdthb_analysis.html",
-    "usdsgd_analysis.html"
+    "usdsgd_analysis.html",
+    "usdcnh_analysis.html"
   ]
 }
