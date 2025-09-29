@@ -34,14 +34,14 @@ jobs:
       run: |
         python generate_fx_dashboard.py
         
-    - name: Commit and push changes
+    - name: Force commit and push
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add fx_fair_value.html fx_fair_value_data.json
+        git add *.html *.json
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
           git commit -m "Auto-update FX fair value dashboard - $(date '+%Y-%m-%d %H:%M')"
-          git push origin main
+          git push --force-with-lease origin main
         fi
