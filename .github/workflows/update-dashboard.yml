@@ -12,7 +12,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+      with:
+        fetch-depth: 0
+        
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -23,9 +25,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install pandas scikit-learn plotly pandas-datareader numpy
         
-    - name: Clean up any existing files
+    - name: Force sync with remote
       run: |
-        rm -f fx_fair_value.html fx_fair_value_data.json
+        git fetch origin main
+        git reset --hard origin/main
         
     - name: Run FX fair value analysis
       run: |
@@ -40,5 +43,5 @@ jobs:
           echo "No changes to commit"
         else
           git commit -m "Auto-update FX fair value dashboard - $(date '+%Y-%m-%d %H:%M')"
-          git push
+          git push origin main
         fi
