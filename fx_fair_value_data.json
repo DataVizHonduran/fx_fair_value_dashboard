@@ -1,76 +1,76 @@
 {
-  "last_updated": "2025-10-18 12:43:40",
+  "last_updated": "2025-10-19 12:43:29",
   "currencies_analyzed": 10,
   "fair_value_summary": [
     {
       "Currency": "USDSEK",
       "Current_Rate": 9.5113,
-      "Fair_Value": 10.535083524678079,
-      "Residual_%": -10.763865346252127,
-      "R_Squared": 0.6730535789501118
+      "Fair_Value": 10.535898310382859,
+      "Residual_%": -10.77243184825269,
+      "R_Squared": 0.6726880587643089
     },
     {
       "Currency": "USDZAR",
       "Current_Rate": 17.4215,
-      "Fair_Value": 18.872670120927285,
-      "Residual_%": -8.329765639739882,
-      "R_Squared": 0.8687391923492065
+      "Fair_Value": 18.874405126686373,
+      "Residual_%": -8.339724631555095,
+      "R_Squared": 0.8712589985027119
     },
     {
       "Currency": "USDNOK",
       "Current_Rate": 10.1161,
-      "Fair_Value": 10.949048756525897,
-      "Residual_%": -8.233892078230722,
-      "R_Squared": 0.7881385359125606
+      "Fair_Value": 10.948830348472312,
+      "Residual_%": -8.231733063851802,
+      "R_Squared": 0.7908096291171445
     },
     {
       "Currency": "USDBRL",
       "Current_Rate": 5.4845,
-      "Fair_Value": 5.819003041676815,
-      "Residual_%": -6.099061749964729,
-      "R_Squared": 0.8526956597349911
+      "Fair_Value": 5.818862256393231,
+      "Residual_%": -6.0964947833573095,
+      "R_Squared": 0.8524503449409879
     },
     {
       "Currency": "USDMXN",
       "Current_Rate": 18.5195,
-      "Fair_Value": 19.554944146664013,
-      "Residual_%": -5.591102063576297,
-      "R_Squared": 0.3804821792965545
+      "Fair_Value": 19.543282333705974,
+      "Residual_%": -5.528131611036873,
+      "R_Squared": 0.38667607765150636
     },
     {
       "Currency": "USDSGD",
       "Current_Rate": 1.2972,
-      "Fair_Value": 1.3585924216524219,
-      "Residual_%": -4.73268745393324,
-      "R_Squared": -4.4161514556773085e-05
+      "Fair_Value": 1.358645153933865,
+      "Residual_%": -4.736752538842522,
+      "R_Squared": -0.00017616131762898668
     },
     {
       "Currency": "USDTHB",
       "Current_Rate": 32.64,
-      "Fair_Value": 33.37793317609672,
-      "Residual_%": -2.2608246816688653,
-      "R_Squared": 0.7268120271692692
+      "Fair_Value": 33.38218237946728,
+      "Residual_%": -2.2738430743482856,
+      "R_Squared": 0.7310694629446559
     },
     {
       "Currency": "USDKRW",
       "Current_Rate": 1428.39,
-      "Fair_Value": 1455.1261221467933,
-      "Residual_%": -1.8717662645911233,
-      "R_Squared": 0.8987162555999504
+      "Fair_Value": 1455.389793725668,
+      "Residual_%": -1.8902256194504168,
+      "R_Squared": 0.8982153608305229
     },
     {
       "Currency": "USDINR",
       "Current_Rate": 88.72,
-      "Fair_Value": 89.1329889708174,
-      "Residual_%": -0.4654970365389933,
-      "R_Squared": 0.9490075392934932
+      "Fair_Value": 89.13640170929767,
+      "Residual_%": -0.4693436759441766,
+      "R_Squared": 0.9499034101693339
     },
     {
       "Currency": "USDCNH",
       "Current_Rate": 7.134,
-      "Fair_Value": 7.1171660180359115,
-      "Residual_%": 0.23596834824907215,
-      "R_Squared": 0.33164991859251336
+      "Fair_Value": 7.115893623781726,
+      "Residual_%": 0.25380398399600096,
+      "R_Squared": 0.33131734860533435
     }
   ],
   "individual_pages": [
