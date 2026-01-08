@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-01-07 12:58:18",
+  "last_updated": "2026-01-08 12:58:07",
   "currencies_analyzed": 10,
   "fair_value_summary": [
     {
@@ -12,16 +12,16 @@
     {
       "Currency": "USDZAR",
       "Current_Rate": 16.4833,
-      "Fair_Value": 18.339470504029663,
-      "Residual_%": -11.26091561780507,
+      "Fair_Value": 18.33947050402966,
+      "Residual_%": -11.260915617805049,
       "R_Squared": 0.844858092603456
     },
     {
       "Currency": "USDNOK",
       "Current_Rate": 10.0531,
-      "Fair_Value": 10.713450480932636,
-      "Residual_%": -6.568625408407708,
-      "R_Squared": 0.7523159647592381
+      "Fair_Value": 10.713450480932634,
+      "Residual_%": -6.56862540840769,
+      "R_Squared": 0.7523159647592382
     },
     {
       "Currency": "USDBRL",
@@ -56,7 +56,7 @@
       "Current_Rate": 6.9877,
       "Fair_Value": 7.0625134086162085,
       "Residual_%": -1.070644255137001,
-      "R_Squared": 0.28874508951539524
+      "R_Squared": 0.288745089515395
     },
     {
       "Currency": "USDKRW",
